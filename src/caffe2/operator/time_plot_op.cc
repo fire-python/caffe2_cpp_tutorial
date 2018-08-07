@@ -38,7 +38,7 @@ template <>
 bool TimePlotOp<float, CPUContext>::RunOnDevice() {
   auto index = index_++;
   if (InputSize() > 1) {
-    index = TensorCPU(Input(1)).data<int64_t>()[0];
+    index = Input(1).data<int64_t>()[0];
   }
   time_plot(Input(0), label_, window_, step_, index, step_count_, index_sum_,
             value_sum_, sq_sum_);

@@ -82,6 +82,13 @@ class Table {
       case Floatpoint::Fixed:
         stream << std::fixed;
         break;
+#if __GUNC__ < 5
+      case Floatpoint::Hex:
+      case Floatpoint::Default:
+      case Floatpoint::Scientific:
+        stream << std::scientific;
+        break;      
+#else        
       case Floatpoint::Scientific:
         stream << std::scientific;
         break;
@@ -91,6 +98,7 @@ class Table {
       case Floatpoint::Default:
         stream << std::defaultfloat;
         break;
+#endif        
       case Floatpoint::None:
         break;
     }

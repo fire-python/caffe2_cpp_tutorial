@@ -7,7 +7,7 @@ namespace caffe2 {
 
 class TensorUtil {
  public:
-  TensorUtil(Tensor<CPUContext>& tensor) : tensor_(tensor) {}
+  TensorUtil(Tensor& tensor) : tensor_(tensor) {}
 
   void ShowImages(const std::string& name, float scale = 1.0, float mean = 128,
                   bool flush = true);
@@ -17,7 +17,7 @@ class TensorUtil {
                    bool lossy = false, int index = 0);
   void WriteImage(const std::string& name, int index, float mean = 128,
                   bool lossy = false);
-  TensorCPU ScaleImageTensor(int width, int height);
+  Tensor ScaleImageTensor(int width, int height);
   void ReadImages(const std::vector<std::string>& filenames, int width,
                   int height, std::vector<int>& indices, float mean = 128,
                   TensorProto::DataType type = TensorProto_DataType_FLOAT);
@@ -25,7 +25,7 @@ class TensorUtil {
   void Print(const std::string& name = "", int max = 100);
 
  protected:
-  Tensor<CPUContext>& tensor_;
+  Tensor& tensor_;
 };
 
 }  // namespace caffe2

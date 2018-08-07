@@ -11,8 +11,8 @@
 
 namespace caffe2 {
 
-void show_worst(const TensorCPU &X, const TensorCPU &label,
-                const TensorCPU &image, const std::string under_name,
+void show_worst(const Tensor &X, const Tensor &label,
+                const Tensor &image, const std::string under_name,
                 const std::string over_name, float scale, float mean) {
   // auto iter = -1;
   // if (InputSize() > 3) {
@@ -63,7 +63,7 @@ void show_worst(const TensorCPU &X, const TensorCPU &label,
     }
   }
 
-  TensorCPU t(image);
+  Tensor t = image.Clone();
   if (pos_i >= 0) {
     auto title =
         "uncertain but correct (" + std::to_string(labelData[pos_i]) + ")";

@@ -2,8 +2,7 @@
 
 namespace caffe2 {
 
-template <typename C>
-void diag_step_size_tensor(const Tensor<C> &tensor, int *step_out,
+void diag_step_size_tensor(const Tensor &tensor, int *step_out,
                            int *size_out) {
   auto step = 0;
   auto size = tensor.dim(0);
@@ -15,8 +14,7 @@ void diag_step_size_tensor(const Tensor<C> &tensor, int *step_out,
   if (size_out) *size_out = size;
 }
 
-template <typename C>
-int offset_in_tensor(const Tensor<C> &tensor,
+int offset_in_tensor(const Tensor &tensor,
                      const std::vector<TIndex> &offset) {
   auto off = 0, i = 0;
   for (auto d : tensor.dims()) {
@@ -25,8 +23,7 @@ int offset_in_tensor(const Tensor<C> &tensor,
   return off;
 }
 
-template <typename C>
-void get_diagonal_tensor(const Tensor<C> &tensor, Tensor<C> &diagonal,
+void get_diagonal_tensor(const Tensor &tensor, Tensor &diagonal,
                          const std::vector<TIndex> &offset) {
   auto off = offset_in_tensor(tensor, offset);
   auto step = 0, size = 0;
@@ -39,8 +36,7 @@ void get_diagonal_tensor(const Tensor<C> &tensor, Tensor<C> &diagonal,
   }
 }
 
-template <typename C>
-void set_diagonal_tensor(Tensor<C> &tensor, const Tensor<C> &diagonal,
+void set_diagonal_tensor(Tensor &tensor, const Tensor &diagonal,
                          const std::vector<TIndex> &offset) {
   auto off = offset_in_tensor(tensor, offset);
   auto step = 0, size = 0;

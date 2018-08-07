@@ -41,7 +41,7 @@ bool SquaredL2ChannelGradientOp<float, CPUContext>::RunOnDevice() {
   dX->ResizeLike(X);
   for (int i = 0; i < N; ++i) {
     auto offset = i * D + (channel_ + i) * E;
-    math::Scale<float, CPUContext>(
+    math::Scale<float, float, CPUContext>(
         E, dY.template data<float>() + i, X.template data<float>() + offset,
         dX->template mutable_data<float>() + offset, &context_);
   }

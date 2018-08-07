@@ -114,9 +114,9 @@ int write_batch(Workspace &workspace, ModelUtil &model, std::string &input_name,
     filenames.push_back(pair.first);
   }
   std::vector<int> indices;
-  TensorCPU input;
+  Tensor input(DeviceType::CPU);
   TensorUtil(input).ReadImages(filenames, width, height, indices);
-  TensorCPU output;
+  Tensor output(DeviceType::CPU);
   if (model.predict.net.external_input_size() && input.size() > 0) {
     BlobUtil(*workspace.GetBlob(input_name)).Set(input);
     CAFFE_ENFORCE(workspace.RunNet(model.predict.net.name()));
@@ -134,7 +134,7 @@ int write_batch(Workspace &workspace, ModelUtil &model, std::string &input_name,
   data->set_data_type(TensorProto::FLOAT);
   label->set_data_type(TensorProto::INT32);
   label->add_int32_data(0);
-  TensorSerializer<CPUContext> serializer;
+  TensorSerializer serializer;
   std::string value;
   std::vector<TIndex> dims(output.dims().begin() + 1, output.dims().end());
   auto size = output.dim(0) ? output.size() / output.dim(0) : 0;

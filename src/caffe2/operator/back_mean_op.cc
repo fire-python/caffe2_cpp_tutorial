@@ -2,8 +2,7 @@
 
 namespace caffe2 {
 
-template <typename C>
-void get_back_mean_tensor(const Tensor<C>& tensor, Tensor<C>& mean, int count) {
+void get_back_mean_tensor(const Tensor& tensor, Tensor& mean, int count) {
   auto dims = tensor.dims();
   auto size = 1;
   while (count--) {
@@ -24,8 +23,7 @@ void get_back_mean_tensor(const Tensor<C>& tensor, Tensor<C>& mean, int count) {
   }
 }
 
-template <typename C>
-void set_back_mean_tensor(Tensor<C>& tensor, const Tensor<C>& mean, int count) {
+void set_back_mean_tensor(Tensor& tensor, const Tensor& mean, int count) {
   auto dims = tensor.dims();
   auto size = 1;
   while (count--) {

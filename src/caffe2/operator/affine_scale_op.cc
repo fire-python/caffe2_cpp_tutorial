@@ -2,9 +2,8 @@
 
 namespace caffe2 {
 
-template <typename C>
-void get_affine_scale_tensor(const Tensor<C>& tensor, const Tensor<C>& mean,
-                             const Tensor<C>& scale, Tensor<C>& transformed,
+void get_affine_scale_tensor(const Tensor& tensor, const Tensor& mean,
+                             const Tensor& scale, Tensor& transformed,
                              bool inverse = false) {
   auto data = tensor.template data<float>();
   auto size = tensor.size() / tensor.dim(0);
@@ -22,9 +21,8 @@ void get_affine_scale_tensor(const Tensor<C>& tensor, const Tensor<C>& mean,
   }
 }
 
-template <typename C>
-void set_affine_scale_tensor(Tensor<C>& tensor, const Tensor<C>& scale,
-                             const Tensor<C>& transformed,
+void set_affine_scale_tensor(Tensor& tensor, const Tensor& scale,
+                             const Tensor& transformed,
                              bool inverse = false) {
   auto data = tensor.template mutable_data<float>();
   auto size = tensor.size() / tensor.dim(0);

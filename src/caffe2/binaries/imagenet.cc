@@ -14,8 +14,7 @@ CAFFE2_DEFINE_int(size, 224, "The image file.");
 
 namespace caffe2 {
 
-template <typename C>
-void printBest(const Tensor<C> &tensor, const std::vector<std::string> &classes,
+void printBest(const Tensor &tensor, const std::vector<std::string> &classes,
                const std::string &name = "") {
   CAFFE_ENFORCE_EQ(classes.size(), tensor.size(),
                    "output size does not match number of classes");
@@ -75,7 +74,7 @@ void run() {
   std::cout << std::endl;
 
   // read image as tensor
-  TensorCPU input;
+  Tensor input(DeviceType::CPU);
   TensorUtil(input).ReadImage(FLAGS_file, FLAGS_size, FLAGS_size);
 
   std::cout << "loading model.." << std::endl;

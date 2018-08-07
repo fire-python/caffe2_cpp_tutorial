@@ -32,7 +32,7 @@ bool SquaredL2GradientOp<float, CPUContext>::RunOnDevice() {
   CAFFE_ENFORCE_EQ(dY.dim32(0), N);
   dX->ResizeLike(X);
   for (int i = 0; i < N; ++i) {
-    math::Scale<float, CPUContext>(
+    math::Scale<float, float, CPUContext>(
         D, dY.template data<float>() + i, X.template data<float>() + i * D,
         dX->template mutable_data<float>() + i * D, &context_);
   }

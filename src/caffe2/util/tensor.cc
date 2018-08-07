@@ -12,7 +12,7 @@ const auto screen_width = 1600;
 const auto window_padding = 4;
 
 template <typename T>
-cv::Mat to_image(const Tensor<CPUContext> &tensor, int index, float scale,
+cv::Mat to_image(const Tensor &tensor, int index, float scale,
                  float mean, int type) {
   CAFFE_ENFORCE_EQ(tensor.ndim(), 4);
   auto count = tensor.dim(0), depth = tensor.dim(1), height = tensor.dim(2),
@@ -37,7 +37,7 @@ cv::Mat to_image(const Tensor<CPUContext> &tensor, int index, float scale,
   return image;
 }
 
-cv::Mat to_image(const Tensor<CPUContext> &tensor, int index, float scale,
+cv::Mat to_image(const Tensor &tensor, int index, float scale,
                  float mean) {
   if (tensor.IsType<float>()) {
     return to_image<float>(tensor, index, scale, mean, CV_32F);
@@ -85,7 +85,7 @@ void TensorUtil::WriteImage(const std::string &name, int index, float mean,
                 "unable to write to " + filename);
 }
 
-TensorCPU TensorUtil::ScaleImageTensor(int width, int height) {
+Tensor TensorUtil::ScaleImageTensor(int width, int height) {
   auto count = tensor_.dim(0), dim_c = tensor_.dim(1), dim_h = tensor_.dim(2),
        dim_w = tensor_.dim(3);
   std::vector<float> output;
@@ -114,7 +114,7 @@ TensorCPU TensorUtil::ScaleImageTensor(int width, int height) {
 }
 
 template <typename T>
-void image_to_tensor(TensorCPU &tensor, cv::Mat &image, float mean = 128) {
+void image_to_tensor(Tensor &tensor, cv::Mat &image, float mean = 128) {
   std::vector<T> data;
   image.convertTo(image, CV_32FC3, 1.0, -mean);
   vector<cv::Mat> channels(3);
@@ -129,7 +129,7 @@ void image_to_tensor(TensorCPU &tensor, cv::Mat &image, float mean = 128) {
 }
 
 template <typename T>
-void read_image_tensor(TensorCPU &tensor,
+void read_image_tensor(Tensor &tensor,
                        const std::vector<std::string> &filenames, int width,
                        int height, std::vector<int> &indices, float mean,
                        TensorProto::DataType type) {
@@ -191,7 +191,7 @@ void read_image_tensor(TensorCPU &tensor,
 
   // create tensor
   std::vector<TIndex> dims({(TIndex)indices.size(), 3, height, width});
-  TensorCPU t(dims, data, NULL);
+  Tensor t(dims, data, NULL);
   tensor.ResizeLike(t);
   tensor.ShareData(t);
 }
@@ -222,8 +222,8 @@ void TensorUtil::ReadImage(const std::string &filename, int width, int height) {
   ReadImages({filename}, width, height, indices);
 }
 
-template <typename T, typename C>
-void tensor_print_type(const Tensor<C> &tensor, const std::string &name,
+template <typename T>
+void tensor_print_type(const Tensor &tensor, const std::string &name,
                        int max) {
   const auto &data = tensor.template data<T>();
   if (name.length() > 0) std::cout << name << "(" << tensor.dims() << "): ";

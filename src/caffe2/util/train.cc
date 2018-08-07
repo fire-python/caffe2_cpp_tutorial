@@ -1,30 +1,11 @@
-#ifndef TRAIN_H
-#define TRAIN_H
+#include "caffe2/util/train.h"
 
-#include <caffe2/core/db.h>
-#include <caffe2/core/init.h>
-#include <caffe2/core/net.h>
 
-#include "caffe2/util/blob.h"
-#include "caffe2/util/model.h"
-#include "caffe2/util/net.h"
-#include "caffe2/util/progress.h"
-#include "caffe2/util/table.h"
-#include "caffe2/util/tensor.h"
-
-namespace caffe2 {
-
-enum { kRunTrain = 0, kRunValidate = 1, kRunTest = 2, kRunNum = 3 };
-
-static std::map<int, std::string> name_for_run({
-    {kRunTrain, "train"},
-    {kRunValidate, "validate"},
-    {kRunTest, "test"},
-});
+namespace caffe2{
 
 void run_trainer(int iters, ModelUtil &train, ModelUtil &validate,
                  Workspace &workspace, clock_t &train_time,
-                 clock_t &validate_time, bool verbose = true) {
+                 clock_t &validate_time, bool verbose) {
   CAFFE_ENFORCE(workspace.RunNetOnce(train.init.net));
   CAFFE_ENFORCE(workspace.RunNetOnce(validate.init.net));
 
@@ -76,8 +57,8 @@ void run_trainer(int iters, ModelUtil &train, ModelUtil &validate,
 }
 
 void run_tester(int iters, ModelUtil &test, Workspace &workspace,
-                clock_t &test_time, bool show_matrix = false,
-                bool verbose = true) {
+                clock_t &test_time, bool show_matrix,
+                bool verbose) {
   CAFFE_ENFORCE(workspace.RunNetOnce(test.init.net));
   CAFFE_ENFORCE(workspace.CreateNet(test.predict.net));
 
@@ -149,6 +130,4 @@ void run_tester(int iters, ModelUtil &test, Workspace &workspace,
   }
 }
 
-}  // namespace caffe2
-
-#endif  // TRAIN_H
+}

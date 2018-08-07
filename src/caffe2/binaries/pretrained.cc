@@ -104,14 +104,14 @@ void run() {
   // >>> p = workspace.Predictor(init_net, predict_net)
   Workspace workspace("tmp");
   CAFFE_ENFORCE(workspace.RunNetOnce(init_net));
-  auto input = workspace.CreateBlob("data")->GetMutable<TensorCPU>();
+  auto input = workspace.CreateBlob("data")->GetMutableTensor(DeviceType::CPU);
   input->ResizeLike(tensor);
   input->ShareData(tensor);
   CAFFE_ENFORCE(workspace.RunNetOnce(predict_net));
 
   // >>> results = p.run([img])
   auto &output_name = predict_net.external_output(0);
-  auto output = workspace.GetBlob(output_name)->Get<TensorCPU>();
+  auto output = workspace.GetBlob(output_name)->Get<Tensor>().Clone();
 
   // sort top results
   const auto &probs = output.data<float>();

@@ -379,7 +379,11 @@ std::string Util::line(float timeout) {
       break;
     } else if (key == '\b' || key == 127) {
       auto s = stream.str();
+#if __GNUC__ < 5
+      stream.str("");
+#else            
       stream = std::stringstream();
+#endif      
       if (s.length() > 0) {
         stream << s.substr(0, s.length() - 1);
       }

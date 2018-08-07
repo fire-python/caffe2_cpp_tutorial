@@ -189,7 +189,7 @@ void run() {
   // read image as tensor
   if (FLAGS_file.size()) {
     auto &input_name = dream.predict.Input(0);
-    TensorCPU input;
+    Tensor input(DeviceType::CPU);
     std::vector<int> x;
     TensorUtil(input).ReadImages({FLAGS_file}, image_size, image_size, x, 128);
     BlobUtil(*workspace.GetBlob(input_name)).Set(input);

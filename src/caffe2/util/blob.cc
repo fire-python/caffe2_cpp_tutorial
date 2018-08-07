@@ -8,23 +8,18 @@
 namespace caffe2 {
 
 TensorCPU BlobUtil::Get() {
-#ifdef WITH_CUDA
-  if (blob_.IsType<TensorCUDA>()) {
-    return TensorCPU(blob_.Get<TensorCUDA>());
-  }
-#endif
-  return blob_.Get<TensorCPU>();
+  return blob_.Get<Tensor>().Clone();
 }
 
-void BlobUtil::Set(const TensorCPU &value, bool force_cuda) {
+void BlobUtil::Set(const Tensor &value, bool force_cuda) {
 #ifdef WITH_CUDA
-  if (force_cuda || blob_.IsType<TensorCUDA>()) {
-    auto tensor = blob_.GetMutable<TensorCUDA>();
+  if (force_cuda) {
+    auto tensor = blob_.GetMutableTensor(DeviceType::CUDA);
     tensor->CopyFrom(value);
     return;
   }
 #endif
-  auto tensor = blob_.GetMutable<TensorCPU>();
+  auto tensor = blob_.GetMutableTensor(DeviceType::CPU);
   tensor->ResizeLike(value);
   tensor->ShareData(value);
 }

@@ -22,8 +22,8 @@ void dump_database(const std::string db_path, const std::string& db_type) {
     protos.ParseFromString(value);
     auto tensor_proto = protos.protos(0);
     auto label_proto = protos.protos(1);
-    TensorDeserializer<CPUContext> deserializer;
-    TensorCPU tensor;
+    TensorDeserializer deserializer;
+    Tensor tensor(DeviceType::CPU);
     int label = label_proto.int32_data(0);
     deserializer.Deserialize(tensor_proto, &tensor);
     auto dims = tensor.dims();

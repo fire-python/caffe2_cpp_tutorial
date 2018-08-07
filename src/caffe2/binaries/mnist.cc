@@ -415,7 +415,7 @@ void predict_example() {
 #ifdef WITH_CUDA
   auto data = workspace.CreateBlob("data")->GetMutable<TensorCUDA>();
 #else
-  auto data = workspace.CreateBlob("data")->GetMutable<TensorCPU>();
+  auto data = workspace.CreateBlob("data")->GetMutableTensor(DeviceType::CPU);
 #endif
   TensorCPU input({1, 1, 28, 28}, data_for_2, NULL);
   data->CopyFrom(input);
@@ -427,7 +427,7 @@ void predict_example() {
 #ifdef WITH_CUDA
   auto softmax = TensorCPU(workspace.GetBlob("softmax")->Get<TensorCUDA>());
 #else
-  auto softmax = workspace.GetBlob("softmax")->Get<TensorCPU>();
+  auto softmax = workspace.GetBlob("softmax")->Get<Tensor>().Clone();
 #endif
   std::vector<float> probs(softmax.data<float>(),
                            softmax.data<float>() + softmax.size());

@@ -2,9 +2,8 @@
 
 namespace caffe2 {
 
-template <typename C>
-void get_mean_stdev_tensor(const Tensor<C>& tensor, Tensor<C>& mean,
-                           Tensor<C>& stdev) {
+void get_mean_stdev_tensor(const Tensor& tensor, Tensor& mean,
+                           Tensor& stdev) {
   auto data = tensor.template data<float>();
   auto size = tensor.size() / tensor.dim(0);
   auto mean_data = mean.template mutable_data<float>();
